@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAS Bisnis Internasional</title>
+<style>
+body{font-family:Arial;margin:0;background:#f4f6f9}
+header{background:#1e3799;color:#fff;padding:15px;text-align:center;position:sticky;top:0}
+.timer{font-weight:bold;color:#ffdd59}
+.container{padding:15px}
+.question{background:#fff;margin-bottom:15px;padding:15px;border-radius:10px}
+label{display:block;margin:8px 0;padding:8px;background:#f1f2f6;border-radius:8px}
+input{transform:scale(1.3);margin-right:8px}
+button{width:100%;padding:15px;font-size:18px;background:#27ae60;color:#fff;border:none;border-radius:10px}
+.result{margin-top:20px;background:#dff9fb;padding:15px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<header>
+<h3>UAS BISNIS INTERNASIONAL (FSAB4307)</h3>
+<div class="timer" id="timer">Sisa waktu: 90:00</div>
+</header>
+
+<div class="container">
+<form id="quizForm"></form>
+<button onclick="submitQuiz()">KUMPULKAN JAWABAN</button>
+<div id="result" class="result"></div>
+</div>
+
+<script>
+const questions = [
+{q:"1. Bisnis internasional adalah …",o:["Kegiatan dalam negeri","Pertukaran lintas negara","Politik luar negeri","Ekspor saja"],a:1,e:"Bisnis internasional melibatkan transaksi lintas negara."},
+{q:"2. Globalisasi ditandai oleh …",o:["Proteksi","Integrasi ekonomi","Nasionalisasi","Monopoli"],a:1,e:"Globalisasi mengintegrasikan ekonomi dunia."},
+{q:"3. Teori keunggulan komparatif dikemukakan oleh …",o:["Adam Smith","David Ricardo","Keynes","Porter"],a:1,e:"Ricardo menjelaskan keunggulan komparatif."},
+{q:"4. Tujuan perdagangan internasional adalah …",o:["Meningkatkan kesejahteraan","Meningkatkan inflasi","Menurunkan impor","Menekan ekspor"],a:0,e:"Perdagangan meningkatkan kesejahteraan."},
+{q:"5. Faktor pendorong bisnis internasional …",o:["Perbedaan SDA","Kesamaan budaya","Proteksi","Nasionalisme"],a:0,e:"Perbedaan sumber daya mendorong perdagangan."},
+
+{q:"6. Sistem ekonomi pasar bebas disebut …",o:["Sosialis","Kapitalis","Tradisional","Komando"],a:1,e:"Kapitalisme mengandalkan pasar bebas."},
+{q:"7. Tarif impor bertujuan …",o:["Dorong ekspor","Lindungi industri","Naikkan kurs","Percepat impor"],a:1,e:"Tarif melindungi industri dalam negeri."},
+{q:"8. WTO berfungsi mengatur …",o:["Politik dunia","Perdagangan internasional","Kesehatan","Pendidikan"],a:1,e:"WTO mengatur perdagangan dunia."},
+{q:"9. Investasi langsung luar negeri disebut …",o:["FDI","Ekspor","Impor","Portofolio"],a:0,e:"FDI adalah investasi langsung."},
+{q:"10. Contoh organisasi regional adalah …",o:["IMF","ASEAN","World Bank","OECD"],a:1,e:"ASEAN organisasi regional Asia Tenggara."},
+
+{q:"11. Sistem moneter internasional mengatur …",o:["Harga","Nilai tukar","Produksi","Upah"],a:1,e:"Sistem moneter mengatur kurs."},
+{q:"12. Pasar valuta asing disebut …",o:["Money market","Capital market","Forex","Stock"],a:2,e:"Forex adalah pasar valuta asing."},
+{q:"13. Global capital market berkaitan dengan …",o:["Saham internasional","Impor","Ekspor","Produksi"],a:0,e:"Pasar modal global memperdagangkan saham."},
+{q:"14. IMF berperan menjaga …",o:["Perdagangan","Stabilitas moneter","Politik","Budaya"],a:1,e:"IMF menjaga stabilitas moneter."},
+{q:"15. Budaya memengaruhi …",o:["Strategi pemasaran","Kurs","Pajak","Ekspor"],a:0,e:"Budaya memengaruhi strategi pemasaran."},
+
+{q:"16. Sistem hukum memengaruhi …",o:["Kontrak bisnis","Produksi","Distribusi","Promosi"],a:0,e:"Hukum menentukan kontrak."},
+{q:"17. Hambatan non-tarif berupa …",o:["Pajak","Kuota","Subsidi","Tarif"],a:1,e:"Kuota membatasi jumlah impor."},
+{q:"18. Organisasi perdagangan dunia …",o:["IMF","WTO","WHO","OECD"],a:1,e:"WTO mengatur perdagangan."},
+{q:"19. Digitalisasi ditandai dengan …",o:["E-commerce","Proteksi","Nasionalisasi","Monopoli"],a:0,e:"Digitalisasi mendorong e-commerce."},
+{q:"20. E-commerce termasuk …",o:["Bisnis digital","Bisnis lokal","Bisnis tradisional","Bisnis informal"],a:0,e:"E-commerce adalah bisnis digital."},
+
+{q:"21. Dampak digitalisasi adalah …",o:["Efisiensi naik","Biaya naik","Pasar menyempit","Produksi turun"],a:0,e:"Digitalisasi meningkatkan efisiensi."},
+{q:"22. Risiko tertinggi terdapat pada …",o:["Ekspor","Lisensi","Joint venture","FDI"],a:3,e:"FDI paling berisiko."},
+{q:"23. Joint venture adalah …",o:["Akuisisi","Kerja sama","Ekspor","Lisensi"],a:1,e:"Joint venture adalah kerja sama."},
+{q:"24. Strategi global bertujuan …",o:["Efisiensi","Standarisasi","Dominasi","Semua benar"],a:3,e:"Strategi global mencakup semuanya."},
+{q:"25. SDM internasional mengatur …",o:["Tenaga kerja global","Produksi","Distribusi","Promosi"],a:0,e:"SDM internasional mengelola tenaga kerja."},
+
+{q:"26. Risiko politik berasal dari …",o:["Kebijakan pemerintah","Inflasi","Teknologi","Pasar"],a:0,e:"Risiko politik berasal dari kebijakan negara."},
+{q:"27. Adaptasi dilakukan agar …",o:["Sesuai budaya","Seragam","Murah","Standar"],a:0,e:"Adaptasi menyesuaikan budaya lokal."},
+{q:"28. Kurs mengambang berarti …",o:["Tetap","Pasar","IMF","Pemerintah"],a:1,e:"Kurs mengikuti pasar."},
+{q:"29. Hedging bertujuan …",o:["Untung","Kurangi risiko","Naikkan pajak","Ekspor"],a:1,e:"Hedging melindungi risiko."},
+{q:"30. Perdagangan internasional meningkatkan …",o:["Efisiensi","Pengangguran","Monopoli","Inflasi"],a:0,e:"Perdagangan meningkatkan efisiensi."},
+
+{q:"31. Hambatan budaya diatasi dengan …",o:["Adaptasi","Standarisasi","Proteksi","Monopoli"],a:0,e:"Adaptasi budaya penting."},
+{q:"32. Negara berkembang mengekspor …",o:["Bahan mentah","Teknologi","Jasa","Modal"],a:0,e:"Ekspor utama negara berkembang adalah bahan mentah."},
+{q:"33. Peran pemerintah …",o:["Regulator","Produsen","Distributor","Eksportir"],a:0,e:"Pemerintah sebagai regulator."},
+{q:"34. Global value chain berarti …",o:["Produksi lintas negara","Distribusi lokal","Pasar tunggal","Ekspor"],a:0,e:"Produksi melibatkan banyak negara."},
+{q:"35. Ekspor tidak langsung melalui …",o:["Agen","Distributor","Perantara","Semua benar"],a:3,e:"Ekspor tidak langsung lewat perantara."},
+
+{q:"36. Manfaat FDI …",o:["Transfer teknologi","Pengangguran","Inflasi","Defisit"],a:0,e:"FDI membawa teknologi."},
+{q:"37. Risiko nilai tukar terjadi karena …",o:["Fluktuasi kurs","Pajak","Produksi","Upah"],a:0,e:"Fluktuasi kurs menimbulkan risiko."},
+{q:"38. Organisasi regional Eropa …",o:["NAFTA","EU","ASEAN","APEC"],a:1,e:"EU adalah organisasi Eropa."},
+{q:"39. Keunggulan kompetitif diperoleh melalui …",o:["Inovasi","Efisiensi","Kualitas","Semua benar"],a:3,e:"Keunggulan berasal dari banyak faktor."},
+{q:"40. Strategi multidomestik menekankan …",o:["Adaptasi lokal","Standarisasi","Sentralisasi","Globalisasi"],a:0,e:"Multidomestik fokus adaptasi."},
+
+{q:"41. Pasar uang internasional berkaitan dengan …",o:["Jangka pendek","Jangka panjang","Saham","Properti"],a:0,e:"Pasar uang bersifat jangka pendek."},
+{q:"42. Perdagangan bebas berarti …",o:["Tanpa hambatan","Tarif tinggi","Subsidi","Pembatasan"],a:0,e:"Perdagangan bebas tanpa hambatan."},
+{q:"43. Tujuan organisasi internasional …",o:["Kerja sama global","Monopoli","Proteksi","Nasionalisasi"],a:0,e:"Tujuan utama adalah kerja sama."},
+{q:"44. Peran teknologi adalah …",o:["Efisiensi","Hambatan","Keterbatasan","Biaya tinggi"],a:0,e:"Teknologi meningkatkan efisiensi."},
+{q:"45. Inti strategi bisnis internasional …",o:["Keunggulan bersaing","Ekspansi","Skala","Produksi"],a:0,e:"Fokus pada keunggulan bersaing."}
+];
+
+let html="";
+questions.forEach((q,i)=>{
+html+=`<div class="question"><p>${q.q}</p>`;
+q.o.forEach((opt,j)=>{
+html+=`<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`;
+});
+html+=`</div>`;
+});
+document.getElementById("quizForm").innerHTML=html;
+
+let time=90*60;
+setInterval(()=>{
+let m=Math.floor(time/60),s=time%60;
+document.getElementById("timer").innerText=`Sisa waktu: ${m}:${s<10?"0"+s:s}`;
+time--;
+if(time<0) submitQuiz();
+},1000);
+
+function submitQuiz(){
+let score=0, out="";
+questions.forEach((q,i)=>{
+let ans=document.querySelector(`input[name=q${i}]:checked`);
+if(ans && parseInt(ans.value)==q.a) score++;
+out+=`<p><b>${q.q}</b><br>Jawaban: ${q.o[q.a]}<br><i>${q.e}</i></p>`;
+});
+document.getElementById("result").innerHTML=`<h3>Nilai Anda: ${score}/45</h3>`+out;
+window.scrollTo(0,document.body.scrollHeight);
+}
+</script>
+
+</body>
+</html>
